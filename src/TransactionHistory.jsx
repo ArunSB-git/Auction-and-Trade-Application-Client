@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import default styles for toast
 
 function TransactionHistory() {
     const transactionHistory_endpoint = "http://localhost:8080/api/transactionHistory";
     const updateTransactionStatus_endpoint = "http://localhost:8080/api/updateTransactionStatus";
-    
+
     const [transactionHistory, setTransactionHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -83,7 +83,7 @@ function TransactionHistory() {
                                     <p>Bid Amount: {formatCurrency(transaction.bidAmount)}</p>
                                     <p>Current market value: {formatCurrency(transaction.player.auctionPrice)}</p>
                                     <p>
-                                        Status:   
+                                        Status:
                                         {transaction.status === 'pending' ? (
                                             <span>
                                                 <span
