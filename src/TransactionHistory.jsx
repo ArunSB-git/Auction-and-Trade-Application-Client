@@ -111,7 +111,9 @@ function TransactionHistory() {
                                         <p>Bid By: {transaction.user.username}</p>
                                     ) : transaction.status === 'approved' ? (
                                         <p>Sold To: {transaction.user.username}</p>
-                                    ) : null}
+                                    ) : (
+                                        <p>Bid By: {transaction.user.username}</p> // Show Bid By for rejected status
+                                    )}
                                 </div>
                             </div>
                         </div>
