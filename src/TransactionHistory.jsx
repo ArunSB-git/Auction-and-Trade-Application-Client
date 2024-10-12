@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import default styles for toast
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function TransactionHistory() {
     const transactionHistory_endpoint = "http://localhost:8080/api/transactionHistory";
@@ -10,14 +11,17 @@ function TransactionHistory() {
 
     const [transactionHistory, setTransactionHistory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState({ username: "Admin", loggedIn: true });
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const navigate = useNavigate();
 
     const formatCurrency = (value) => {
         if (value >= 10000000) {
-            return `${(value / 10000000).toFixed(2)} Cr`; // Crores
+            return `${(value / 10000000).toFixed(2)} Cr`;
         } else if (value >= 100000) {
-            return `${(value / 100000).toFixed(2)} L`; // Lakhs
+            return `${(value / 100000).toFixed(2)} L`;
         } else {
-            return value.toString(); // If less than a lakh, return as is
+            return value.toString();
         }
     };
 
@@ -31,7 +35,7 @@ function TransactionHistory() {
             setTransactionHistory(response.data);
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message;
-            toast.error(`Error: ${errorMessage}`); // Show error toast
+            toast.error(`Error: ${errorMessage}`);
             console.error(err);
         } finally {
             setLoading(false);
@@ -51,9 +55,13 @@ function TransactionHistory() {
             getTransactionHistory();
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message;
-            toast.error(`Error: ${errorMessage}`); // Show error toast
+            toast.error(`Error: ${errorMessage}`);
             console.error(err);
         }
+    };
+
+    const handleLogout = () => {
+        navigate("/"); // Redirect to login page
     };
 
     useEffect(() => {
@@ -67,6 +75,19 @@ function TransactionHistory() {
     return (
         <div style={styles.container}>
             <ToastContainer />
+            <div style={styles.header}>
+                <div style={styles.profileContainer}>
+                    <button onClick={() => setDropdownVisible(!dropdownVisible)} style={styles.profileButton}>
+                        Profile details
+                    </button>
+                    {dropdownVisible && (
+                        <div style={styles.dropdown}>
+                            <b>{user.username}</b>
+                            <button onClick={handleLogout} style={styles.logoutButton}><b>Logout</b></button>
+                        </div>
+                    )}
+                </div>
+            </div>
             <div style={styles.transactionHistory}>
                 <h2>Transaction History</h2>
                 <div style={styles.transactionList}>
@@ -107,13 +128,7 @@ function TransactionHistory() {
                                             <span style={styles.rejected}> <b> REJECTED</b></span>
                                         )}
                                     </p>
-                                    {transaction.status === 'pending' ? (
-                                        <p>Bid By: {transaction.user.username}</p>
-                                    ) : transaction.status === 'approved' ? (
-                                        <p>Sold To: {transaction.user.username}</p>
-                                    ) : (
-                                        <p>Bid By: {transaction.user.username}</p> // Show Bid By for rejected status
-                                    )}
+                                    <p>{transaction.status === 'approved' ? `Sold To: ${transaction.user.username}` : `Bid By: ${transaction.user.username}`}</p>
                                 </div>
                             </div>
                         </div>
@@ -126,12 +141,46 @@ function TransactionHistory() {
 
 const styles = {
     container: {
-        display: 'flex',
-        padding: '20px',
+        padding: '25px',
+        position: 'relative',
     },
-    transactionHistory: {
-        flex: '1',
+    header: {
+        position: 'fixed',
+        top: '0',
+        right: '0',
         padding: '10px',
+        zIndex: 1000,
+        backgroundColor: 'white',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    profileContainer: {
+        position: 'relative',
+    },
+    profileButton: {
+        padding: '5px 10px',
+        cursor: 'pointer',
+    },
+    dropdown: {
+        backgroundColor: 'white',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        padding: '10px',
+        position: 'absolute',
+        right: '0',
+        zIndex: 1000,
+    },
+    logoutButton: {
+        background: 'none',
+        border: 'none',
+        color: 'black',
+        cursor: 'pointer',
+    },
+
+    transactionHistory: {
+        padding: '10px',
+        marginTop: '60px', // Ensure content doesn't overlap with fixed header
     },
     transactionList: {
         display: 'flex',
