@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
+import { API_ENDPOINTS } from "../endpoint";
 
 function TransactionHistory() {
-    const transactionHistory_endpoint = "http://localhost:8080/api/transactionHistory";
-    const updateTransactionStatus_endpoint = "http://localhost:8080/api/updateTransactionStatus";
+    const transactionHistory_endpoint = API_ENDPOINTS.TRANSACTION_HISTORY_ENDPOINT;
+    const updateTransactionStatus_endpoint = API_ENDPOINTS.UPDATE_TRANSACTION_STATUS_ENDPOINT;
 
     const [transactionHistory, setTransactionHistory] = useState([]);
     const [loading, setLoading] = useState(true);

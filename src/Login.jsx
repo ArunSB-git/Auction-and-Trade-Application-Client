@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { API_ENDPOINTS } from "../endpoint";
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/auth', {
+            const response = await axios.post(API_ENDPOINTS.LOGIN_ENDPOINT, {
                 username,
                 password,
             });
@@ -72,7 +73,6 @@ const Login = () => {
 
 const styles = {
     container: {
-        backgroundImage: 'url(https://w0.peakpx.com/wallpaper/289/847/HD-wallpaper-uefa-champions-league-emblem-logo-football-football-european-tournament-champions-league.jpg)',
         height: '100vh',
         display: 'flex',
         alignItems: 'center',
